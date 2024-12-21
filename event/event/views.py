@@ -1,10 +1,12 @@
 from django.contrib.auth.models import User
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import UserRegistrationForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from .models import Event
+from .forms import EventForm
 
 def register(request):
     if request.method == 'POST':
@@ -48,6 +50,29 @@ def user_login(request):
 def home(request):
     return render(request, 'home.html')
 
+@login_required
+def event_list(request):
+    events = Event.objects.all()
+    return render(request, 'event_list.html', {'events': events})
+
+@login_required
+def add_event(request):
+    if request.method == 'POST':
+        form = EventForm(request.POST)
+        if form.is_valid():
+            event = form.save(commit=False)
+            event.created_by = request.user
+            event.save()
+            form.save_m2m()  # Save the many-to-many field for guests
+            return redirect('event_list')
+    else:
+        form = EventForm()
+    return render(request, 'add_event.html', {'form': form})
+
+@login_required
+def event_detail(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+    return render(request, 'event_detail.html', {'event': event})
 
 
 

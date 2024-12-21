@@ -18,6 +18,10 @@ from django.contrib import admin
 from django.urls import path
 from . import views
 from django.contrib.auth.views import LoginView, LogoutView
+from django.views.static import serve
+from django.conf import settings
+import os
+from django.conf.urls.static import static
 
 # urlpatterns = [
 #     path('admin/', admin.site.urls),
@@ -28,4 +32,8 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(), name='logout'),  # Logout
     path('register/', views.register, name='register'),  # Registration page
     path('', views.home, name='home'),  # Home page
-]
+    path('events/', views.event_list, name='event_list'),
+    path('events/add/', views.add_event, name='add_event'),
+    path('events/<int:event_id>/', views.event_detail, name='event_detail'),
+    path('assets/<path:path>/', serve, {'document_root': os.path.join(settings.BASE_DIR, 'assets')})
+] + static(settings.STATIC_URL, document_root=settings.BASE_DIR / 'assets')
