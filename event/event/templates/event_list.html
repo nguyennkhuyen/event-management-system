@@ -1,33 +1,43 @@
 <!DOCTYPE html>
 <html>
+
 <head>
+    <link rel="stylesheet" href="/assets/style.css">
     <title>Home</title>
 </head>
+
 <body>
-    <nav class="sidebar">
-        <h2>Navigation</h2>
+    <div class="container">
+        <nav class="sidebar">
+            <ul>
+                <li><a href="{% url 'home' %}"><button class="btn"><img src="/assets/cloud.png" alt="cloud Icon" class="button-icon" />
+                    Home</button></a></li>
+                <li><a href="{% url 'event_list' %}"><button class="btn"><img src="/assets/list.png" alt="list Icon" class="button-icon" />
+                    Event List</button></a></li>
+                <li><a href="{% url 'add_event' %}"><button class="btn"><img src="/assets/write.png" alt="write Icon" class="button-icon" />
+                    Add Event</button></a></li>
+                {% if user.is_authenticated %}
+                    <form method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button type="submit">Logout</button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'login' %}">Login</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+    <div class="container">
+        <h2>Events</h2>
         <ul>
-            <li><a href="{% url 'home' %}">Home</a></li>
-            {% if user.is_authenticated %}
+            {% for event in events %}
             <li>
-                <form method="post" action="{% url 'logout' %}">
-                    {% csrf_token %}
-                    <button type="submit">Logout</button>
-                </form>
+                <a href="{% url 'event_detail' event.id %}">{{ event.name }}</a> - {{ event.date }}
             </li>
-            {% else %}
-                <li><a href="{% url 'login' %}">Login</a></li>
-            {% endif %}
+            {% endfor %}
         </ul>
-    </nav>
-    <h2>Events</h2>
-<a href="{% url 'add_event' %}">Add New Event</a>
-<ul>
-    {% for event in events %}
-        <li>
-            <a href="{% url 'event_detail' event.id %}">{{ event.name }}</a> - {{ event.date }}
-        </li>
-    {% endfor %}
-</ul>
+        <a href="{% url 'add_event' %}"><button class="btn">Add New Event</button></a>
+    </div>
 </body>
+
 </html>

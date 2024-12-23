@@ -1,30 +1,39 @@
 <!DOCTYPE html>
 <html>
+
 <head>
+    <link rel="stylesheet" href="/assets/style.css">
     <title>Home</title>
 </head>
+
 <body>
-    <nav class="sidebar">
-        <h2>Navigation</h2>
-        <ul>
-            <li><a href="{% url 'home' %}">Home</a></li>
-            {% if user.is_authenticated %}
-            <li>
-                <form method="post" action="{% url 'logout' %}">
-                    {% csrf_token %}
-                    <button type="submit">Logout</button>
-                </form>
-            </li>
-            {% else %}
-                <li><a href="{% url 'login' %}">Login</a></li>
-            {% endif %}
-        </ul>
-    </nav>
-    <h2>Add Event</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-    <button type="submit">Save</button>
-</form>
+    <div class="container">
+        <nav class="sidebar">
+            <ul>
+                <li><a href="{% url 'home' %}"><button class="btn"><img src="/assets/cloud.png" alt="cloud Icon" class="button-icon" />
+                    Home</button></a></li>
+                <li><a href="{% url 'event_list' %}"><button class="btn"><img src="/assets/list.png" alt="list Icon" class="button-icon" />
+                    Event List</button></a></li>
+                <li><a href="{% url 'add_event' %}"><button class="btn"><img src="/assets/write.png" alt="write Icon" class="button-icon" />
+                    Add Event</button></a></li>
+                {% if user.is_authenticated %}
+                    <form method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button type="submit">Logout</button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'login' %}">Login</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+    <div class="container">
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+            <button type="submit">Save</button>
+        </form>
+    </div>
 </body>
+
 </html>
