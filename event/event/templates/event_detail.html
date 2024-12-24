@@ -16,6 +16,9 @@
                     Event List</button></a></li>
                 <li><a href="{% url 'add_event' %}"><button class="btn"><img src="/assets/write.png" alt="write Icon" class="button-icon" />
                     Add Event</button></a></li>
+                {% if user == event.created_by %}
+                    <a href="{% url 'delete_event' event.id %}" class="btn btn-danger">Delete Event</a>
+                {% endif %}
                 {% if user.is_authenticated %}
                     <form method="post" action="{% url 'logout' %}">
                         {% csrf_token %}
@@ -27,17 +30,19 @@
             </ul>
         </nav>
     </div>
-    <h2>{{ event.name }}</h2>
-    <p><strong>Description:</strong> {{ event.description }}</p>
-    <p><strong>Date:</strong> {{ event.date }}</p>
-    <p><strong>Location:</strong> {{ event.location }}</p>
-    <p><strong>Guests:</strong></p>
-    <ul>
-        {% for guest in event.guests.all %}
-            <li>{{ guest.username }}</li>
-        {% endfor %}
-    </ul>
-    <a href="{% url 'event_list' %}">Back to Events</a>
+    <div class="text-box">
+        <h2>{{ event.name }}</h2>
+        <p><strong>Description:</strong> {{ event.description }}</p>
+        <p><strong>Date:</strong> {{ event.date }}</p>
+        <p><strong>Location:</strong> {{ event.location }}</p>
+        <p><strong>Guests:</strong></p>
+        <ul>
+            {% for guest in event.guests.all %}
+                <li>{{ guest.username }}</li>
+            {% endfor %}
+        </ul>
+        <a href="{% url 'event_list' %}">Back to Events</a>
+    </div>
 </body>
 
 </html>

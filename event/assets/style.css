@@ -1,9 +1,11 @@
 body {
-    background-image: url('/assets/cloudBackgroun.jpg');
+    background-image: url('/assets/background.jpg');
+    background-repeat: no-repeat;
+    background-size: contain, cover;
     background-color: lightblue;
     background-size: cover;
-    background-repeat: no-repeat;
-    display: flex;
+    display: inline-flex;
+    flex-direction: column;
 }
 
 /* Container to hold the sidebar and main content */
@@ -74,4 +76,28 @@ body {
     width: 50px; 
     height: 50px;
     margin-right: 10px;
+}
+
+/* Text Box Styling */
+.text-box {
+    background-color: whitesmoke;
+    padding: 20px; 
+    margin: 20px 0;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px lightblue;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+        
+/* Headings */
+.text-box h2 {
+    margin-top: 0;
+    color: #333;
+}
+        
+/* Paragraphs */
+.text-box p {
+    line-height: 2;
+    font-size: larger;
 }

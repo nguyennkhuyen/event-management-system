@@ -48,7 +48,9 @@ def user_login(request):
 
 @login_required
 def home(request):
-    return render(request, 'home.html')
+    user_events = Event.objects.filter(created_by=request.user)  # Fetch events created by the user
+    print(f"User: {request.user}, Events: {user_events}")  # Debugging line
+    return render(request, 'home.html', {'user_events': user_events})
 
 @login_required
 def event_list(request):
@@ -57,14 +59,15 @@ def event_list(request):
 
 @login_required
 def add_event(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         form = EventForm(request.POST)
         if form.is_valid():
             event = form.save(commit=False)
             event.created_by = request.user
             event.save()
-            form.save_m2m()  # Save the many-to-many field for guests
-            return redirect('event_list')
+            form.save_m2m()  # Save many-to-many data for guests
+            messages.success(request, "Event added successfully!")
+            return redirect('event_list')  # Redirect to your event list view
     else:
         form = EventForm()
     return render(request, 'add_event.html', {'form': form})
@@ -73,6 +76,22 @@ def add_event(request):
 def event_detail(request, event_id):
     event = get_object_or_404(Event, id=event_id)
     return render(request, 'event_detail.html', {'event': event})
+
+@login_required
+def delete_event(request, event_id):
+    event = get_object_or_404(Event, id=event_id)
+
+    # Ensure only the creator of the event can delete it
+    if event.created_by != request.user:
+        messages.error(request, "You do not have permission to delete this event.")
+        return redirect('event_detail', event_id=event.id)  # Adjust the redirect as needed
+
+    if request.method == "POST":
+        event.delete()
+        messages.success(request, "Event deleted successfully!")
+        return redirect('event_list')  # Redirect to a list of events or other appropriate page
+
+    return render(request, 'events/delete_event.html', {'event': event})
 
 
 

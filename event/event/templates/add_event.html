@@ -27,11 +27,36 @@
             </ul>
         </nav>
     </div>
-    <div class="container">
-            <form method="post">
-                {% csrf_token %}
-                {{ form.as_p }}
-            <button type="submit">Save</button>
+    <div class="text-box">
+        <h2>Add Event</h2>
+        <form method="POST">
+          {% csrf_token %}
+      
+          <!-- Event Fields -->
+          <div>
+              {{ form.name.label_tag }} {{ form.name }}
+          </div>
+          <div>
+              {{ form.description.label_tag }} {{ form.description }}
+          </div>
+          <div>
+              {{ form.date.label_tag }} {{ form.date }}
+          </div>
+          <div>
+              {{ form.guests.label_tag }} {{ form.guests }}
+          </div>
+      
+          <!-- Location Fields -->
+          <div>
+              <label for="id_location_name">Location Name:</label>
+              <input type="text" name="location_name" id="id_location_name">
+          </div>
+          <div>
+              <label for="id_location_address">Location Address:</label>
+              <textarea name="location_address" id="id_location_address"></textarea>
+          </div>
+      
+          <button type="submit" class="btn btn-primary">Add Event</button>
         </form>
     </div>
 </body>

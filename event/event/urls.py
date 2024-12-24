@@ -32,8 +32,9 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(), name='logout'),  # Logout
     path('register/', views.register, name='register'),  # Registration page
     path('', views.home, name='home'),  # Home page
-    path('events/', views.event_list, name='event_list'),
-    path('events/add/', views.add_event, name='add_event'),
-    path('events/<int:event_id>/', views.event_detail, name='event_detail'),
+    path('event/', views.event_list, name='event_list'),
+    path('event/add/', views.add_event, name='add_event'),
+    path('event/<int:event_id>/', views.event_detail, name='event_detail'),
+    path('event/<int:event_id>/delete/', views.delete_event, name='delete_event'),
     path('assets/<path:path>/', serve, {'document_root': os.path.join(settings.BASE_DIR, 'assets')})
 ] + static(settings.STATIC_URL, document_root=settings.BASE_DIR / 'assets')
